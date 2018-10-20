@@ -1,2 +1,2 @@
-gti is a version control system
+gti is a distributed version control system
 git is free software
