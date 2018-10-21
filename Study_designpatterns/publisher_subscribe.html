@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Publisher_Subscribe</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/jquery-3.3.1.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	</head>
+	<body>
+		<div class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">
+					Content
+				</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="puba"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">
+					Automatic generation
+				</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" placeholder="generation email" id="suba" readonly="readonly"/>
+					<input type="text" class="form-control" placeholder="generation ID" id="subb" readonly="readonly"/>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			function Publisher(obj){
+				this.obj =obj;
+				this.subscribers =[];
+				var message =obj.value;
+				this.setMess =function(mess){
+					// note the naming of variables
+					message =mess;
+					this.pushMess();
+				}
+				this.getMess =function(){
+					return message;
+				}
+			}
+			Publisher.prototype.addSubers =function(obj){
+				var flag =false;
+				for(var i=this.subscribers.length-1;i>0;i--){
+					if(this.subscribers[i] ==obj){
+						flag =true
+					}
+				}
+				if(!flag){
+					this.subscribers.push(obj)
+				}
+				return this
+			}
+			Publisher.prototype.removeSubers =function(obj){
+				var subscriber =this.subscribers;
+				for(var i=0;i<subscriber.lenth;i++){
+					if(subscriber[i] ==obj){
+						subscriber.splice(i, 1);
+					}
+				}
+				return this
+			}
+			Publisher.prototype.pushMess =function(){
+				var subscriber =this.subscribers
+				for(var i=0;i<subscriber.length;i++){
+					subscriber[i].updateMess(this.getMess())
+				}
+			}
+			function Subscribers(obj){
+				this.obj =obj;
+				this.updateMess =function(mess){
+					this.obj.value =mess
+				}
+				this.clearMess =function(mess){
+					if(mess ==''){
+						this.obj.value =''
+					}
+				}
+			}
+			var puba =new Publisher(document.querySelector('#puba'));
+			var suba =new Subscribers(document.querySelector('#suba'));
+			var subb =new Subscribers(document.querySelector('#subb'));
+			puba.addSubers(suba);
+			puba.addSubers(subb);
+			suba.updateMess =function(mess){
+				this.obj.value = mess + "@email.com";
+			}
+			subb.updateMess =function(mess){
+				this.obj.value = "ID---" + mess;
+			}
+			puba.obj.addEventListener("keydown", function(){
+				puba.setMess(this.value)
+				if(this.value ==''){
+					suba.clearMess(this.value);
+					subb.clearMess(this.value);
+				}
+			})
+		</script>
+	</body>
+</html>
