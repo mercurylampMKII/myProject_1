@@ -4,4 +4,9 @@ add something
 
 Learn .NET
 
-master branch update
+<<<<<<< HEAD
+master branch update and and and
+=======
+
+Learn java on branch feature1
+>>>>>>> feature1
