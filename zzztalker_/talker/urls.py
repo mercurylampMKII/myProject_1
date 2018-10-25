@@ -14,5 +14,8 @@ urlpatterns = [
     path('update/', views.bgUpdate),
     path('showAjax/', views.showAjax),
     path('index-search/', views.indexSearch),
+    path('user-login-index/', views.userLoginIndex),
+    path('user-login/', views.userLogin),
+    path('user-login-out/', views.userLoginOut),
 
 ]

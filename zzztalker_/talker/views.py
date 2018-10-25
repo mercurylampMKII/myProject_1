@@ -1,10 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .models import Counters, Foodnews, Dianzan, Fooddianzan
 
-# Create your views here.
+
 import redis
 conn = redis.Redis(host='localhost', port=6379)
-
 # 主页
 def indexHome4dianzan(request):
     list = Foodnews.objects.all()
@@ -30,7 +29,9 @@ def indexHome4dianzan(request):
             my_docs.append({'title' : i.title, 'dianzan' : i.count_num})
     # 天气
     listTem = showWeather()
-    return render(request, 'talker/index-home.html', {'list' : currentPage, 'my_docs': my_docs, 'lt': listTem})
+    # 用户登录 uname = request.session.get('uname') print('用户是：%s' % uname)
+    return render(request, 'talker/index-home.html',
+                  {'list' : currentPage, 'my_docs': my_docs, 'lt': listTem})
 
 # 简单的模型
 from django.core.paginator import Paginator
@@ -168,6 +169,20 @@ def showWeather():
                  'fengxiang' : fengxiang,
                  'fengli' : fengli})
     return list
+
+def userLoginIndex(request):
+    return render(request, 'talker/user-login-index.html')
+
+def userLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        request.session['uname'] = username
+    return redirect('/index-home/')
+
+def userLoginOut(request):
+    del request.session['uname']
+    return redirect('/index-home/')
 
 def indexNetwork(request):
     return render(request, 'talker/index-network.html')
