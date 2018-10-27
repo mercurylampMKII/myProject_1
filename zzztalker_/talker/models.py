@@ -45,3 +45,14 @@ class Fooddianzan(Document):
         fooddianzan = cls(title=title, content=content, category=category, images=images, title_id=title_id
                           , count_num=count_num)
         return fooddianzan
+
+# 用户表
+class User(Document):
+    username = StringField(max_length=30)
+    password = StringField(max_length=30)
+    urole = StringField(max_length=30)
+    ustatus = IntField(default=0)
+    @classmethod
+    def addUser(cls, username, password, urole, ustatus):
+        user = cls(username=username, password=password, urole=urole, ustatus=ustatus)
+        return user

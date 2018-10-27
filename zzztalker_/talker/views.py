@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import Counters, Foodnews, Dianzan, Fooddianzan
-
+from .models import Counters, Foodnews, Dianzan, Fooddianzan, User
 
 import redis
 conn = redis.Redis(host='localhost', port=6379)
@@ -53,7 +52,12 @@ class MyPaginator(Paginator):
 
 # 后台基础管理页面
 def bgManage(request):
-    return render(request, 'talker/bg-manage-base.html')
+    try:
+        if request.session['role'] =='maneger':
+            return render(request, 'talker/bg-manage-base.html')
+    except KeyError as err:
+        print('the user isnt manager!')
+    return redirect('/index-home/')
 
 # 后台展示数据
 def bgManageShow(request):
@@ -177,11 +181,22 @@ def userLogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        request.session['uname'] = username
+        try:
+            user = User.objects.filter(username=username, password=password)[0]
+            if user:
+                request.session['uname'] = username
+                request.session['role'] =user.urole
+            else:
+                return redirect('/index-home/')
+        except IndexError as err:
+            print(err)
+        else:
+            print('user %s is loading' % username)
     return redirect('/index-home/')
 
 def userLoginOut(request):
     del request.session['uname']
+    del request.session['role']
     return redirect('/index-home/')
 
 def indexNetwork(request):

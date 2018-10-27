@@ -83,8 +83,12 @@ connect('talker')
 
 DATABASES = {
     'default': {
-        'ENGINE': '',
-        'NAME': '',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": ""
     }
 }
 

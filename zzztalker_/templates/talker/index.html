@@ -69,7 +69,9 @@
         <div>
             <p>友情链接&nbsp;&nbsp;
                 <a href="#">XX网站</a>&nbsp;&nbsp;<a href="#">XX网站</a>&nbsp;&nbsp;<a href="#">XX网站</a>
-                &nbsp;&nbsp;<a href="/bg-manage/">后台管理</a></p>
+                    {% ifequal request.session.role 'maneger' %}
+                    &nbsp;&nbsp;<a href="/bg-manage/">后台管理</a></p>
+                    {% endifequal %}
             <p>关于我们&nbsp;&nbsp;联系我们&nbsp;&nbsp;@2018-3999&nbsp;&nbsp;备案</p>
         </div>
     </footer>
