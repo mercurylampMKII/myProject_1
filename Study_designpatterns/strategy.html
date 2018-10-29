@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Strategy_Study</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.js" ></script>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			function ConcreteStrategyA(){
+				this.AlgorithmInterface =function(){
+					console.log("A")
+				}
+			}
+			function ConcreteStrategyB(){
+				this.AlgorithmInterface =function(){
+					console.log("B")
+				}
+			}
+			function ConcreteStrategyC(){
+				this.AlgorithmInterface =function(){
+					console.log("C")
+				}
+			}
+			function Context(strategy){
+				this.strategy =strategy
+				this.ContextInterface =function(){
+					strategy.AlgorithmInterface()
+				}
+			}
+			var contexta =new Context(new ConcreteStrategyA())
+			contexta.ContextInterface()
+			var contextb =new Context(new ConcreteStrategyB())
+			contextb.ContextInterface()
+			var contextc =new Context(new ConcreteStrategyC())
+			contextc.ContextInterface()
+		</script>
+	</body>
+</html>
