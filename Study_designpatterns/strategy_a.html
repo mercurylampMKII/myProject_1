@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/jquery-3.3.1.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	</head>
+	<body>
+		<div class="container">
+			<form action="#" class="form-inline" role="form">
+				<div class="form-group">
+					<label class="control-label">单价：</label>
+					<input type="text" class="price" />
+				</div>
+				<div class="form-group">
+					<label class="control-label">数量：</label>
+					<input type="text" class="num" />
+				</div>
+				<div class="form-group">
+					<label class="control-label">计算方式：</label>
+					<select class="form-control alg">
+						<option value="a">正常价格</option>
+						<option value="b">满1000减998</option>
+						<option value="c">打1折</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="control-label">合计：</label>
+					<input type="text" class="money" />
+				</div>
+				<hr />
+			</form>
+		</div>
+		<div class="container" align="right">
+			<button id="add" class="btn btn-default">增加一个</button>
+		</div>
+		<hr />
+		<div class="container">
+			<label>总价：<input readonly="readonly" id="total" type="text" /></label>
+		</div>
+		<script type="text/javascript">
+			var price =document.getElementsByClassName("price")
+			var num =document.getElementsByClassName("num")
+			var alg =document.getElementsByClassName("alg")
+			var money =document.getElementsByClassName("money")
+			var total =document.querySelector("#total")
+			var addProduct =document.querySelector("#add")
+			addProduct.addEventListener("click",function(){
+				var html =
+					'<section class="container">'+
+						'<label>单价<input type="text" class="price"/></label>'+
+						'<label>数量<input type="text" class="num"/></label>'+
+						'<label>计算方式<input type="text" class="alg"/></label>'+
+						'<label>合计<input type="text" class="money"/>'+
+						'</label>'
+					'</section>'
+				var div =document.createElement("div")
+				div.innerHTML =html
+				this.parentNode.parentNode.insertBefore(div,this.parentNode)
+			})
+			function ConcreteStrategyA(){
+				this.AlgorithmInterface =function(money){
+					return money
+				}
+			}
+			function ConcreteStrategyB(condition, cut){
+				this.AlgorithmInterface =function(money){
+					if(money >=condition){
+						return (money-cut) 
+					}
+					return money
+				}
+			}
+			function ConcreteStrategyC(discount){
+				this.AlgorithmInterface =function(money){
+					return money*discount
+				}
+			}
+			function Context(type){
+				this.strategy =null
+				switch(type){
+					case "a":
+						this.strategy =new ConcreteStrategyA()
+						break
+					case "b":
+						this.strategy =new ConcreteStrategyB()
+						break
+					case "c":
+						this.strategy =new ConcreteStrategyC()
+						break
+				}
+				this.ContextInterface =function(money){
+					return this.strategy.AlgorithmInterface(money)
+				}
+			}
+		</script>
+	</body>
+</html>
