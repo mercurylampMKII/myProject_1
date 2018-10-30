@@ -30,7 +30,6 @@
 					<label class="control-label">合计：</label>
 					<input type="text" class="money" />
 				</div>
-				<hr />
 			</form>
 		</div>
 		<div class="container" align="right">
@@ -52,13 +51,13 @@
 					'<section class="container">'+
 						'<label>单价<input type="text" class="price"/></label>'+
 						'<label>数量<input type="text" class="num"/></label>'+
-						'<label>计算方式<input type="text" class="alg"/></label>'+
+						'<label>计算方式<select class="alg"><option value="a">正常价格</option><option value="a">满1000减988</option><option value="a">打1折</option></select></label>'+
 						'<label>合计<input type="text" class="money"/>'+
 						'</label>'
 					'</section>'
 				var div =document.createElement("div")
 				div.innerHTML =html
-				this.parentNode.parentNode.insertBefore(div,this.parentNode)
+				this.parentNode.parentNode.insertBefore(div,this.parentNode.previousSibling)
 			})
 			function ConcreteStrategyA(){
 				this.AlgorithmInterface =function(money){
@@ -85,16 +84,61 @@
 						this.strategy =new ConcreteStrategyA()
 						break
 					case "b":
-						this.strategy =new ConcreteStrategyB()
+						this.strategy =new ConcreteStrategyB(1000,998)
 						break
 					case "c":
-						this.strategy =new ConcreteStrategyC()
+						this.strategy =new ConcreteStrategyC(0.8)
 						break
 				}
 				this.ContextInterface =function(money){
 					return this.strategy.AlgorithmInterface(money)
 				}
 			}
+			function calculate(e){
+				var thenum =0
+				className =e.target.className
+				switch(className){
+					case "price":
+						for(var i=price.length-1;i>=0;i--){
+							if(price[i] ==e.target){
+								thenum =i
+							}
+						}
+						break
+					case "num":
+						for(var i=num.length-1;i>=0;i--){
+							if(num[i] ==e.target){
+								thenum =i
+							}
+						}
+						break
+					case "alg":
+						for(var i=alg.length-1;i>=0;i--){
+							if(alg[i] ==e.target){
+								thenum =i
+							}
+						}
+						break
+					default:
+						return
+				}
+				var context =new Context(alg[thenum].value)
+				var themoney =0
+				var thetotalvalue =0
+				
+				themoney =context.ContextInterface(price[thenum].value * num[thenum].value)
+				
+				
+				money[thenum].value =themoney
+				
+				for(var i=0;i<money.length;i++){	
+					thetotalvalue +=money[thenum].value*1
+				}
+				
+				total.value =thetotalvalue	
+			}
+			document.addEventListener("keyup", calculate, false)
+			document.addEventListener("change", calculate, false)
 		</script>
 	</body>
 </html>
